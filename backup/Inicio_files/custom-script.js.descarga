@@ -1,0 +1,87 @@
+(function ($) {
+	$(document).ready(function () {
+		// fix edit tool tip
+		var btnEdit = $('a.jmodedit');
+
+		if (btnEdit.length > 0){
+			$.each(btnEdit, function (idx, _el){
+				var el = $(_el);
+				var tooltipId = el.attr('aria-describedby').length > 0 ? el.attr('aria-describedby').trim() : null;
+				if (tooltipId != null) {
+					el.on('mouseenter', function (event) {
+						$(`div#${tooltipId}`).addClass('show');
+					}).on('mouseleave', function (){
+						$(`div#${tooltipId}`).removeClass('show');
+					})
+				}
+			})
+		}
+
+		var article_body = $('div.com-content-article__body').length > 0
+			? $('div.com-content-article__body') :  $('div[itemprop="articleBody"]');
+		
+		if (article_body && article_body.length > 0) {
+			$('<dialog>', {
+				id: 'portfolio-modal',
+				class: 'custom-modal',
+				// title: 'now this div has a title!'
+			}).appendTo(article_body);
+			$('<button>', {
+				id: 'close-modal'
+			}).appendTo('#portfolio-modal');
+			$('button#close-modal')[0].innerText = 'x';
+		}
+		// popup image in portfolio page
+		var wrapper = $('div.pages_portfolio');
+		if (wrapper && wrapper.length > 0){
+			var all_imgs = wrapper.find('img');
+			var btns = wrapper.find('a.button.s5mb');
+			var modal = $('#portfolio-modal');
+			if (modal.length == 0) {
+				console.log('Can\'t create Dialog element inside article body! \nUse event default!');
+				return;
+			}
+
+			if (btns && btns.length > 0){
+				btns.each(function (idx, el) {
+					var $el = $(el);
+					// $(document).on('click', $el, function (event) {
+					$el.on('click', function (event) {
+						// stop default event: show an image in other page
+						event.preventDefault();
+						$('<img>', {
+							id: `popup-img-${idx}`,
+							src: all_imgs[idx].src,
+							alt: all_imgs[idx].alt,
+						}).appendTo('dialog#portfolio-modal');
+
+						modal[0].showModal();
+						stop_scroll()
+						// $('button#close-modal, dialog#portfolio-modal').on('click', function (event) {
+						$('button#close-modal').on('click', function (event) {
+							start_scroll()
+							// close modal
+							modal[0].close();
+							modal.children('img:first').remove();
+						})
+					})
+				})
+			}
+		}
+		function stop_scroll() {
+			$('html, body').css({overflow: 'hidden',});
+		}
+		
+		function start_scroll() {
+			$('html, body').css({overflow: 'auto',});
+		}
+
+		function stop_scroll_on_hover(element) {
+			element.on('scroll touchmove mousewheel', function (e) {
+				e.preventDefault();
+				e.stopPropagation();
+				return false;
+			})
+		}
+	})
+})(jQuery)
