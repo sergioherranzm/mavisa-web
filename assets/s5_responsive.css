@@ -46,8 +46,8 @@
   #s5_below_columns_wrap,
   #s5_left_column_wrap_inner,
   #s5_right_column_wrap_inner {
-    padding-left: 20px;
-    padding-top: 20px;
+    padding-left: 0px; /* MODIFICADO POR SERGIO */
+    padding-top: 0px;
   }
 
   #s5_component_wrap_inner {
@@ -112,8 +112,8 @@
 
   #s5_bottom_row3 {
     padding: 0px;
-    padding-top: 16px;
-    padding-bottom: 10px;
+    padding-top: 20px; /* MODIFICADO POR SERGIO */
+    padding-bottom: 0px; /* MODIFICADO POR SERGIO */
   }
 
   #s5_search_wrap {
